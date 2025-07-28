@@ -20,9 +20,15 @@ def analyze_data(data):
     df['is_effective_reply'] = df['Bot 回复'].apply(is_effective)
     effective_reply_counts = df['is_effective_reply'].value_counts().to_dict()
 
+    df = df.rename(columns={
+        'optimization_category': '优化方向分类',
+        'sentiment': '情感分析',
+        'is_effective_reply': '是否有效回复'
+    })
+
     return {
-        'optimization_category_counts': df['optimization_category'].value_counts().to_dict(),
-        'sentiment_counts': df['sentiment'].value_counts().to_dict(),
+        'optimization_category_counts': df['优化方向分类'].value_counts().to_dict(),
+        'sentiment_counts': df['情感分析'].value_counts().to_dict(),
         'category_counts': category_counts,
         'effective_reply_counts': effective_reply_counts,
         'dataframe': df.to_html()
