@@ -17,13 +17,15 @@ def analyze_data(data):
     category_counts = df['问题分类'].value_counts().to_dict()
 
     # Problem 4: Effective Replies
-    df['is_effective_reply'] = df['Bot 回复'].apply(is_effective)
-    effective_reply_counts = df['is_effective_reply'].value_counts().to_dict()
+    df['effectiveness'] = df['Bot 回复'].apply(is_effective)
+    ineffective_reasons = df[df['effectiveness'] != '有效回复']['effectiveness'].value_counts().to_dict()
+    effective_reply_counts = df['effectiveness'].value_counts().to_dict()
+
 
     df = df.rename(columns={
         'optimization_category': '优化方向分类',
         'sentiment': '情感分析',
-        'is_effective_reply': '是否有效回复'
+        'effectiveness': '回复有效性'
     })
 
     return {
@@ -31,6 +33,7 @@ def analyze_data(data):
         'sentiment_counts': df['情感分析'].value_counts().to_dict(),
         'category_counts': category_counts,
         'effective_reply_counts': effective_reply_counts,
+        'ineffective_reasons': ineffective_reasons,
         'dataframe': df.to_html()
     }
 
@@ -66,5 +69,5 @@ def is_effective(reply):
     """
     reply = str(reply)
     if '问题小桂还在学习中' in reply or '换个问法试试' in reply:
-        return False
-    return True
+        return '简短无信息回复'
+    return '有效回复'

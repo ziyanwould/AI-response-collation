@@ -109,6 +109,25 @@ input[type="submit"]:hover {
     border: 1px solid var(--border-color);
 }
 
+.sentiment-details {
+    margin-top: 16px;
+}
+
+.sentiment-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.sentiment-label {
+    font-weight: 500;
+}
+
+.sentiment-percentage {
+    color: var(--secondary-text-color);
+}
+
 .data-table-card {
     background-color: var(--primary-surface-color);
     padding: 16px;
