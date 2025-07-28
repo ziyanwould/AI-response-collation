@@ -5,26 +5,36 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>聊天分析</title>
+    <title>聊天分析智能体</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>聊天分析智能体</h1>
-        <div class="upload-section">
-            <h2>上传 CSV 文件</h2>
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="file">
-                <input type="submit" value="上传并分析">
-            </form>
+        <div class="sidebar">
+            <h1>聊天分析智能体</h1>
+            <div class="input-group">
+                <h2>上传 CSV 文件</h2>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file">
+                    <input type="submit" value="上传并分析">
+                </form>
+            </div>
+            <div class="input-group">
+                <h2>或粘贴 CSV 数据</h2>
+                <form action="/analyze" method="post">
+                    <textarea name="data" placeholder="在此处粘贴您的 CSV 数据..."></textarea>
+                    <input type="submit" value="分析粘贴的数据">
+                </form>
+            </div>
         </div>
-        <div class="paste-section">
-            <h2>或粘贴 CSV 数据</h2>
-            <form action="/analyze" method="post">
-                <textarea name="data" rows="10" cols="80"></textarea>
-                <br>
-                <input type="submit" value="分析粘贴的数据">
-            </form>
+        <div class="main-content">
+            {% if results %}
+                {% include 'results.html' %}
+            {% else %}
+                <div class="placeholder">
+                    <h1>分析结果将在此处显示</h1>
+                </div>
+            {% endif %}
         </div>
     </div>
 </body>

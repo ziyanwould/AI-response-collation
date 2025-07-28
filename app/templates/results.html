@@ -1,97 +1,107 @@
-<!doctype html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>分析结果</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1>分析结果</h1>
-
-        <div class="results">
-            <div class="chart-container">
-                <div class="chart">
-                    <h2>优化方向分类</h2>
-                    <canvas id="optimizationChart"></canvas>
-                </div>
-                <div class="chart">
-                    <h2>情感分析</h2>
-                    <canvas id="sentimentChart"></canvas>
-                </div>
-                <div class="chart">
-                    <h2>问题分类频率</h2>
-                    <canvas id="categoryChart"></canvas>
-                </div>
-                <div class="chart">
-                    <h2>有效回复统计</h2>
-                    <canvas id="effectiveChart"></canvas>
-                </div>
-            </div>
-
-            <h2>分析数据</h2>
-            <div class="data-table">
-                {{ dataframe|safe }}
-            </div>
-        </div>
+<div class="chart-container">
+    <div class="chart-card">
+        <h2>优化方向分类</h2>
+        <canvas id="optimizationChart"></canvas>
     </div>
+    <div class="chart-card">
+        <h2>情感分析</h2>
+        <canvas id="sentimentChart"></canvas>
+    </div>
+    <div class="chart-card">
+        <h2>问题分类频率</h2>
+        <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="chart-card">
+        <h2>有效回复统计</h2>
+        <canvas id="effectiveChart"></canvas>
+    </div>
+</div>
 
-    <script>
-        new Chart(document.getElementById('optimizationChart'), {
-            type: 'pie',
-            data: {
-                labels: {{ optimization_category_counts_labels|tojson }},
-                datasets: [{
-                    data: {{ optimization_category_counts_values|tojson }},
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
-                }]
-            }
-        });
+<div class="data-table-card">
+    <h2>分析数据</h2>
+    <div class="data-table">
+        {{ dataframe|safe }}
+    </div>
+</div>
 
-        new Chart(document.getElementById('sentimentChart'), {
-            type: 'pie',
-            data: {
-                labels: {{ sentiment_counts_labels|tojson }},
-                datasets: [{
-                    data: {{ sentiment_counts_values|tojson }},
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                }]
-            }
-        });
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    Chart.defaults.color = 'rgba(224, 224, 224, 1)';
+    Chart.defaults.borderColor = 'rgba(51, 51, 51, 1)';
 
-        new Chart(document.getElementById('categoryChart'), {
-            type: 'bar',
-            data: {
-                labels: {{ category_counts_labels|tojson }},
-                datasets: [{
-                    label: 'Frequency',
-                    data: {{ category_counts_values|tojson }},
-                    backgroundColor: '#36A2EB'
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    new Chart(document.getElementById('optimizationChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ optimization_category_counts_labels|tojson }},
+            datasets: [{
+                data: {{ optimization_category_counts_values|tojson }},
+                backgroundColor: ['#00aaff', '#00ffaa', '#ffaa00', '#ff00aa']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
                 }
             }
-        });
+        }
+    });
 
-        new Chart(document.getElementById('effectiveChart'), {
-            type: 'pie',
-            data: {
-                labels: ['有效', '无效'],
-                datasets: [{
-                    data: [{{ effective_reply_counts.get(True, 0) }}, {{ effective_reply_counts.get(False, 0) }}],
-                    backgroundColor: ['#4CAF50', '#F44336']
-                }]
+    new Chart(document.getElementById('sentimentChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ sentiment_counts_labels|tojson }},
+            datasets: [{
+                data: {{ sentiment_counts_values|tojson }},
+                backgroundColor: ['#ff4444', '#44ff44', '#aaaaaa']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
             }
-        });
-    </script>
-</body>
-</html>
+        }
+    });
+
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ category_counts_labels|tojson }},
+            datasets: [{
+                label: '频率',
+                data: {{ category_counts_values|tojson }},
+                backgroundColor: '#00aaff'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('effectiveChart'), {
+        type: 'pie',
+        data: {
+            labels: ['有效', '无效'],
+            datasets: [{
+                data: [{{ effective_reply_counts.get(True, 0) }}, {{ effective_reply_counts.get(False, 0) }}],
+                backgroundColor: ['#44ff44', '#ff4444']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
