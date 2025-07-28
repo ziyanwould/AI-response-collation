@@ -5,13 +5,25 @@
     </div>
     <div class="chart-card">
         <h2>情感分析</h2>
-        <canvas id="sentimentChart"></canvas>
         <div class="sentiment-details">
             {% for sentiment, count in results.sentiment_counts.items() %}
             <div class="sentiment-item">
                 <span class="sentiment-label">{{ sentiment }}</span>
-                <span class="sentiment-count">{{ count }}</span>
-                <span class="sentiment-percentage">({{ (count / results.sentiment_counts.values()|sum * 100)|round(1) }}%)</span>
+                <div class="sentiment-bar">
+                    <div class="sentiment-bar-inner" style="width: {{ (count / results.sentiment_counts.values()|sum * 100)|round(1) }}%; background-color: {{ ['#ff4444', '#44ff44', '#aaaaaa'][loop.index0] }};"></div>
+                </div>
+                <span class="sentiment-percentage">{{ (count / results.sentiment_counts.values()|sum * 100)|round(1) }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="chart-card">
+        <h2>无效回复原因分析</h2>
+        <div class="ineffective-reasons">
+            {% for reason, count in results.ineffective_reasons.items() %}
+            <div class="reason-item">
+                <span class="reason-label">{{ reason }}</span>
+                <span class="reason-count">{{ count }} 次</span>
             </div>
             {% endfor %}
         </div>

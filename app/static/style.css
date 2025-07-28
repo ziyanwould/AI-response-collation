@@ -98,7 +98,7 @@ input[type="submit"]:hover {
 
 .chart-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 24px;
 }
 
@@ -109,23 +109,41 @@ input[type="submit"]:hover {
     border: 1px solid var(--border-color);
 }
 
-.sentiment-details {
-    margin-top: 16px;
+.sentiment-details, .ineffective-reasons {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
 }
 
-.sentiment-item {
+.sentiment-item, .reason-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    align-items: center;
+    margin-bottom: 12px;
     font-size: 14px;
 }
 
-.sentiment-label {
+.sentiment-label, .reason-label {
     font-weight: 500;
 }
 
-.sentiment-percentage {
+.sentiment-bar, .reason-bar {
+    height: 8px;
+    background-color: var(--secondary-surface-color);
+    border-radius: 4px;
+    flex-grow: 1;
+    margin: 0 12px;
+}
+
+.sentiment-bar-inner, .reason-bar-inner {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.sentiment-percentage, .reason-count {
     color: var(--secondary-text-color);
+    min-width: 50px;
+    text-align: right;
 }
 
 .data-table-card {
