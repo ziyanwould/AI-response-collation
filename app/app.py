@@ -9,10 +9,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 def process_data(data):
     try:
         results = analyze_data(data)
@@ -23,33 +19,31 @@ def process_data(data):
         results['sentiment_counts_values'] = list(results['sentiment_counts'].values())
         results['category_counts_labels'] = list(results['category_counts'].keys())
         results['category_counts_values'] = list(results['category_counts'].values())
-        return render_template('results.html', **results)
+        return render_template('index.html', results=results)
     except pd.errors.EmptyDataError:
         return "错误：上传的CSV文件为空或无效。"
     except Exception as e:
         return f"发生错误：{e}"
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file' not in request.files:
-        return redirect(request.url)
-    file = request.files['file']
-    if file.filename == '':
-        return redirect(request.url)
-    if file:
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-        data = pd.read_csv(filepath).to_csv(index=False)
-        return process_data(data)
-
-
-@app.route('/analyze', methods=['POST'])
-def analyze_text_data():
-    data = request.form['data']
-    if not data:
-        return "错误：粘贴的数据为空。"
-    return process_data(data)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename == '':
+                return redirect(request.url)
+            if file:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+                data = pd.read_csv(filepath).to_csv(index=False)
+                return process_data(data)
+        elif 'data' in request.form:
+            data = request.form['data']
+            if not data:
+                return "错误：粘贴的数据为空。"
+            return process_data(data)
+    return render_template('index.html', results=None)
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
