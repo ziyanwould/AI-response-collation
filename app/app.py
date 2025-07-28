@@ -19,6 +19,7 @@ def process_data(data):
         results['sentiment_counts_values'] = list(results['sentiment_counts'].values())
         results['category_counts_labels'] = list(results['category_counts'].keys())
         results['category_counts_values'] = list(results['category_counts'].values())
+        # The following line is changed to pass the results to the template
         return render_template('index.html', results=results)
     except pd.errors.EmptyDataError:
         return "错误：上传的CSV文件为空或无效。"

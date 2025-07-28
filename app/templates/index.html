@@ -29,7 +29,7 @@
         </div>
         <div class="main-content">
             {% if results %}
-                {% include 'results.html' %}
+                {% include 'results.html' with context %}
             {% else %}
                 <div class="placeholder">
                     <h1>分析结果将在此处显示</h1>
