@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Analysis Results</h1>
+
+        <div class="results">
+            <h2>Optimization Category Distribution</h2>
+            <div class="chart">
+                <canvas id="optimizationChart"></canvas>
+            </div>
+
+            <h2>Sentiment Analysis</h2>
+            <div class="chart">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+
+            <h2>Question Category Frequency</h2>
+            <div class="chart">
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <h2>Effective vs. Ineffective Replies</h2>
+            <div class="chart">
+                <canvas id="effectiveChart"></canvas>
+            </div>
+
+            <h2>Analyzed Data</h2>
+            <div class="data-table">
+                {{ dataframe|safe }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Chart(document.getElementById('optimizationChart'), {
+            type: 'pie',
+            data: {
+                labels: {{ optimization_category_counts.keys()|tojson }},
+                datasets: [{
+                    data: {{ optimization_category_counts.values()|tojson }},
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('sentimentChart'), {
+            type: 'pie',
+            data: {
+                labels: {{ sentiment_counts.keys()|tojson }},
+                datasets: [{
+                    data: {{ sentiment_counts.values()|tojson }},
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ category_counts.keys()|tojson }},
+                datasets: [{
+                    label: 'Frequency',
+                    data: {{ category_counts.values()|tojson }},
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('effectiveChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Effective', 'Ineffective'],
+                datasets: [{
+                    data: [{{ effective_reply_counts.get(True, 0) }}, {{ effective_reply_counts.get(False, 0) }}],
+                    backgroundColor: ['#4CAF50', '#F44336']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
