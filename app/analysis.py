@@ -34,13 +34,13 @@ def categorize_question(question):
     """
     question = str(question).lower()
     if '转人工' in question or '客服' in question:
-        return 'System Issue'
+        return '系统问题'
     elif '界面' in question or '显示' in question:
-        return 'UI Issue'
+        return '界面问题'
     elif '不知道' in question or '不明白' in question or '什么意思' in question:
-        return 'Unclear Answer'
+        return '回答不明确'
     else:
-        return 'General Inquiry'
+        return '一般查询'
 
 def sentiment_analysis(question):
     """
@@ -48,11 +48,11 @@ def sentiment_analysis(question):
     """
     question = str(question).lower()
     if '没有回复' in question or '不行' in question or '失败' in question:
-        return 'Negative'
+        return '负面'
     elif '谢谢' in question or '感谢' in question or '好的' in question:
-        return 'Positive'
+        return '正面'
     else:
-        return 'Neutral'
+        return '中性'
 
 def is_effective(reply):
     """
