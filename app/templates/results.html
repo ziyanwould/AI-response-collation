@@ -51,24 +51,19 @@
     Chart.defaults.borderColor = 'rgba(51, 51, 51, 1)';
 
     new Chart(document.getElementById('optimizationRadarChart'), {
-        type: 'radar',
+        type: 'doughnut',
         data: {
             labels: {{ results.optimization_category_counts_labels|tojson }},
             datasets: [{
-                label: '优化方向',
                 data: {{ results.optimization_category_counts_values|tojson }},
-                backgroundColor: 'rgba(0, 170, 255, 0.2)',
-                borderColor: 'rgba(0, 170, 255, 1)',
-                pointBackgroundColor: 'rgba(0, 170, 255, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(0, 170, 255, 1)'
+                backgroundColor: ['#00aaff', '#00ffaa', '#ffaa00', '#ff00aa', '#aaff00', '#aa00ff']
             }]
         },
         options: {
-            elements: {
-                line: {
-                    borderWidth: 3
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
                 }
             }
         }
